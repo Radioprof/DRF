@@ -2,13 +2,17 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import UserList from './components/User.js';
+import ProjectList from "./components/Project";
 import axios from 'axios';
+import project from "./components/Project";
+import {BrowserRouter, Route, Link, Switch, Redirect} from "react-router-dom";
 
 class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            'users': []
+            'users': [],
+            'projects': project
         }
     }
 
@@ -25,8 +29,22 @@ class App extends React.Component {
     }
     render() {
         return (
-            <div>
-                <UserList users={this.state.users} />
+            <div className="App">
+                <BrowserRouter>
+                <nav>
+                    <ul>
+                        <li>
+                            <Link to='/'>Users</Link>
+                        </li>
+                         <li>
+                            <Link to='/projects'>Projects</Link>
+                        </li>
+
+                    </ul>
+                </nav>
+                    <Route exact path='/' component={() => <UserList users={this.state.users} />} />
+                    <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
+                </BrowserRouter>
             </div>
         )
     }
