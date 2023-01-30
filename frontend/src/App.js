@@ -7,6 +7,7 @@ import TodoList from "./components/Todo.js";
 import axios from 'axios';
 // import project from "./components/Project";
 import {BrowserRouter, Route, Link, Switch, Redirect} from "react-router-dom";
+import LoginForm from './components/Auth.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -17,6 +18,22 @@ class App extends React.Component {
             'todo': TodoList
         }
     }
+
+    load_data() {
+        axios.get('http://127.0.0.1:8000/api/authors/')
+            .then(response => {
+                this.setState({authors: response.data})
+            }).catch(error => console.log(error))
+        axios.get('http://127.0.0.1:8000/api/books/')
+            .then(response => {
+                this.setState({books: response.data})
+            }).catch(error => console.log(error))
+    }
+
+    componentDidMount() {
+        this.load_data()
+    }
+
 
     componentDidMount() {
         axios.get('http://127.0.0.1:8000/api/users')
@@ -49,24 +66,28 @@ class App extends React.Component {
 
 
     }
+
     render() {
         return (
             <div className="App">
                 <BrowserRouter>
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to='/'>Users</Link>
-                        </li>
-                         <li>
-                            <Link to='/projects'>Projects</Link>
-                        </li>
-                         <li>
-                            <Link to='/todo'>ToDo</Link>
-                        </li>
-                    </ul>
-                </nav>
-                    <Route exact path='/' component={() => <UserList users={this.state.users} />} />
+                    <nav>
+                        <ul>
+                            <li>
+                                <Link to='/'>Users</Link>
+                            </li>
+                            <li>
+                                <Link to='/projects'>Projects</Link>
+                            </li>
+                            <li>
+                                <Link to='/todo'>ToDo</Link>
+                            </li>
+                            <li>
+                                <Link to='/login'>Login</Link>
+                            </li>
+                        </ul>
+                    </nav>
+                    <Route exact path='/' component={() => <UserList users={this.state.users}/>}/>
                     {/*<Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />*/}
                     {/*<Route exact path='/todo' component={() => <TodoList todolist={this.state.todolist} />} />*/}
 
@@ -75,4 +96,5 @@ class App extends React.Component {
         )
     }
 }
+
 export default App;
