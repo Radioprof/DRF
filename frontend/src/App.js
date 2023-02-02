@@ -2,10 +2,9 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import UserList from './components/User.js';
-import ProjectList from "./components/Project.js";
+import ProjectList from './components/Project.js';
 import TodoList from "./components/Todo.js";
 import axios from 'axios';
-// import project from "./components/Project";
 import {BrowserRouter, Route, Link, Switch, Redirect} from "react-router-dom";
 import LoginForm from './components/Auth.js';
 
@@ -14,28 +13,12 @@ class App extends React.Component {
         super(props)
         this.state = {
             'users': [],
-            'projects': ProjectList,
-            'todo': TodoList
+            'projects': [],
+            'todo': []
         }
     }
 
     load_data() {
-        axios.get('http://127.0.0.1:8000/api/authors/')
-            .then(response => {
-                this.setState({authors: response.data})
-            }).catch(error => console.log(error))
-        axios.get('http://127.0.0.1:8000/api/books/')
-            .then(response => {
-                this.setState({books: response.data})
-            }).catch(error => console.log(error))
-    }
-
-    componentDidMount() {
-        this.load_data()
-    }
-
-
-    componentDidMount() {
         axios.get('http://127.0.0.1:8000/api/users')
             .then(response => {
                 const users = response.data
@@ -45,26 +28,28 @@ class App extends React.Component {
                     }
                 )
             }).catch(error => console.log(error))
-        // axios.get('http://127.0.0.1:8000/api/projects')
-        //     .then(response => {
-        //         const projects = response.data
-        //         this.setState(
-        //             {
-        //                 'projects': projects
-        //             }
-        //         )
-        //     }).catch(error => console.log(error))
-        //  axios.get('http://127.0.0.1:8000/api/todo')
-        //     .then(response => {
-        //         const todolist = response.data
-        //         this.setState(
-        //             {
-        //                 'todo': todolist
-        //             }
-        //         )
-        //     }).catch(error => console.log(error))
+        axios.get('http://127.0.0.1:8000/api/projects')
+            .then(response => {
+                const projects = response.data
+                this.setState(
+                    {
+                        'projects': projects
+                    }
+                )
+            }).catch(error => console.log(error))
+        axios.get('http://127.0.0.1:8000/api/todo')
+            .then(response => {
+                const todolist = response.data
+                this.setState(
+                    {
+                        'todo': todolist
+                    }
+                )
+            }).catch(error => console.log(error))
+    }
 
-
+    componentDidMount() {
+        this.load_data()
     }
 
     render() {
@@ -88,8 +73,9 @@ class App extends React.Component {
                         </ul>
                     </nav>
                     <Route exact path='/' component={() => <UserList users={this.state.users}/>}/>
-                    {/*<Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />*/}
-                    {/*<Route exact path='/todo' component={() => <TodoList todolist={this.state.todolist} />} />*/}
+                    <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
+                    <Route exact path='/todo' component={() => <TodoList todolist={this.state.todolist} />} />
+                    {/*<Route exact path='/login' component={() => <LoginForm todolist={this.state.todolist} />} />*/}
 
                 </BrowserRouter>
             </div>
