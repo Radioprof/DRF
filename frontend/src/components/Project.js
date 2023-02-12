@@ -1,19 +1,22 @@
 import React from 'react'
 
-const ProjectItem = ({ project }) => {
+const ProjectItem = ({ item, deleteProject }) => {
     return (
         <tr>
             <td>
-                {project.name}
+                {item.name}
             </td>
             <td>
-                {project.user}
+                {item.user}
+            </td>
+            <td>
+                <button onClick={()=>deleteProject(item.name)} type='button'>Delete</button>
             </td>
         </tr>
     )
 }
 
-const ProjectList = ({ projects }) => {
+const ProjectList = ({ items, deleteProject }) => {
     return (
         <table>
             <th>
@@ -22,7 +25,8 @@ const ProjectList = ({ projects }) => {
             <th>
                 User
             </th>
-            {projects.map((project) => <ProjectItem project={project} />)}
+            <th></th>
+            {items.map((item) => <ProjectItem item={item} />)}
         </table>
     )
 }

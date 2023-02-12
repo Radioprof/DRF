@@ -76,11 +76,28 @@ class App extends React.Component {
                     <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
                     <Route exact path='/todo' component={() => <TodoList todolist={this.state.todolist} />} />
                     {/*<Route exact path='/login' component={() => <LoginForm todolist={this.state.todolist} />} />*/}
+                    <Route exact path='/projects' component={() => <ProjectList items={this.state.project} deleteProject={(id)=>this.deleteProject(id)} />} />
+                    <Route exact path='/todo' component={() => <TodoListList items={this.state.todo} deleteTodo={(id)=>this.deleteTodo(id)} />} />
 
                 </BrowserRouter>
             </div>
         )
     }
+    deleteProject(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/projects/${id}`, {headers})
+        .then(response => {
+            this.setState({projects: this.state.projects.filter((item)=>item.id !== id)})
+        }).catch(error => console.log(error))
+    }
+    deleteTodo(id) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/todo/${id}`, {headers})
+        .then(response => {
+            this.setState({todo: this.state.todo.filter((item)=>item.id !== id)})
+        }).catch(error => console.log(error))
+    }
+
 }
 
 export default App;
